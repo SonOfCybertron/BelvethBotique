@@ -1,0 +1,300 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title | BELVETH</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            --z-red: #DC143C;
+            --z-bg: #ffffff;
+            --z-text: #333333;
+            --z-text-light: #666666;
+            --z-border: #e0e0e0;
+            --z-card-bg: #fafafa;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: var(--z-text);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+
+        .navbar-brand {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--z-red) !important;
+            letter-spacing: 2px;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            background: white;
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-category {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--z-text);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.5rem 0;
+            margin: 0 1rem;
+            position: relative;
+        }
+
+            .nav-category:hover {
+                color: var(--z-red) !important;
+            }
+
+        .search-bar {
+            max-width: 500px;
+            width: 100%;
+        }
+
+            .search-bar .form-control {
+                border: 1px solid var(--z-border);
+                border-radius: 30px;
+                padding-left: 20px;
+                height: 44px;
+                font-size: 0.95rem;
+            }
+
+        .nav-icons a {
+            color: var(--z-text);
+            margin: 0 10px;
+            font-size: 1.2rem;
+            transition: color 0.2s;
+        }
+
+            .nav-icons a:hover {
+                color: var(--z-red);
+            }
+
+        .btn-cart {
+            background-color: var(--z-red);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-section {
+            height: 60vh;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .product-card {
+            border: none;
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.25s ease;
+            height: 100%;
+        }
+
+            .product-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            }
+
+        .product-img {
+            height: 260px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover .product-img {
+            transform: scale(1.05);
+        }
+
+        .product-price {
+            color: var(--z-red);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .category-tile {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--z-card-bg);
+            border-radius: 8px;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--z-text);
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+            .category-tile:hover {
+                background: var(--z-red);
+                color: white;
+                transform: translateY(-3px);
+            }
+
+        footer {
+            background: #222;
+            color: #fff;
+            padding: 3rem 0 2rem;
+            margin-top: auto;
+            width: 100%;
+        }
+
+            footer h5 {
+                color: var(--z-red) !important;
+            }
+
+            footer .text-muted {
+                color: #ddd !important;
+            }
+    </style>
+</head>
+<body>
+    @{
+
+        var isAdminPage = ViewContext.RouteData.Values["controller"].ToString() == "Admin";
+    }
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+
+            <a class="navbar-brand"
+               href="@(isAdminPage ? Url.Action("Dashboard", "Admin") : Url.Action("Index", "Home"))">
+                BELVETH
+            </a>
+
+
+            @{
+                var showSearch = ViewContext.RouteData.Values["controller"].ToString() == "Home" &&
+                                 (ViewContext.RouteData.Values["action"].ToString() == "Index" ||
+                                  ViewContext.RouteData.Values["action"].ToString() == "Shop" ||
+                                  ViewContext.RouteData.Values["action"].ToString() == "Details");
+            }
+
+            @if (showSearch)
+            {
+                <div class="search-bar mx-lg-5 d-none d-lg-block">
+                    @using (Html.BeginForm("Shop", "Home", FormMethod.Get))
+                    {
+                        <div class="input-group">
+                            <input type="text"
+                                   name="search"
+                                   class="form-control"
+                                   placeholder="Search for products, brands..."
+                                   value="@Request.QueryString["search"]" />
+                            <span class="input-group-text" style="background: transparent; border: none; padding: 0 12px;">
+                                <button type="submit" class="btn p-0" style="color: var(--z-red); font-size: 1.2rem;">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    }
+                </div>
+            }
+
+
+            <div class="nav-icons d-flex align-items-center">
+                @if (!isAdminPage)
+                {
+                    if (Session["Username"] != null)
+                    {
+                        <a href="@Url.Action("Index", "Cart")"
+                           class="text-muted me-2 position-relative"
+                           style="font-size: 1.2rem; transition: color 0.2s;">
+                            <i class="bi bi-bag"></i>
+                            <span class="badge bg-crimson rounded-pill position-absolute top-0 start-100 translate-middle" style="font-size: 0.75rem;">3</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Login", "Account", new { needCartAccess = true, returnUrl = Request.Url.PathAndQuery })"
+                           class="text-muted me-2 position-relative"
+                           style="font-size: 1.2rem; transition: color 0.2s;">
+                            <i class="bi bi-bag"></i>
+                        </a>
+                    }
+                }
+
+
+                @if (Session["Username"] != null)
+                {
+                    <span class="me-2 d-none d-md-inline small text-muted">@Session["Username"]</span>
+                    <a href="@Url.Action("Logout", "Account")" class="text-muted" style="font-size: 1.2rem; transition: color 0.2s;">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Login", "Account")" class="text-muted" style="font-size: 1.2rem; transition: color 0.2s;">
+                        <i class="bi bi-person"></i>
+                    </a>
+                }
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid py-4 flex-grow-1">
+        @RenderBody()
+    </div>
+
+    <footer>
+        <div class="container py-4">
+            <div class="text-center">
+                <h5 style="color: var(--z-red); font-weight: 700; letter-spacing: 1px;">BELVETH</h5>
+                <p class="small mb-2" style="color: #ddd;">Elegance forged in the dark.</p>
+                <p class="small mb-0" style="color: #ddd;">&copy; @DateTime.Now.Year Belveth Boutique. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

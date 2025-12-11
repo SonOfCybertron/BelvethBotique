@@ -1,0 +1,57 @@
+﻿@model IEnumerable<BelvethBotique.Models.SessionCartItem>
+
+@{
+    ViewBag.Title = "Shopping Cart";
+}
+
+<h2>Your Cart</h2>
+
+@if (!Model.Any())
+{
+    <p>Your cart is empty.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>
+                        <form action="@Url.Action("UpdateQuantity", "Cart")" method="post">
+                            <input type="hidden" name="id" value="@item.ProductId" />
+                            <input type="number" name="qty" value="@item.Quantity" min="1" style="width:60px;" />
+                            <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                        </form>
+                    </td>
+                    <td>@(item.Price * item.Quantity).ToString("C")</td>
+                    <td>
+                        <a href="@Url.Action("Remove", "Cart", new { id = item.ProductId })" class="btn btn-sm btn-danger">Remove</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-right"><strong>Total:</strong></td>
+                <td colspan="2">
+                    <strong>@Model.Sum(x => x.Price * x.Quantity).ToString("C")</strong>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <a href="@Url.Action("Clear", "Cart")" class="btn btn-warning">Clear Cart</a>
+    <a href="@Url.Action("Checkout", "Cart")" class="btn btn-success">Checkout</a>
+}

@@ -1,0 +1,115 @@
+﻿@model IEnumerable<BelvethBotique.Models.CartItem>
+@{
+    ViewBag.Title = "UserCart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Users' Cart Details</h2>
+
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-dark">
+                <i class="bi bi-box"></i> Inventory
+            </a>
+
+            <a href="@Url.Action("UserCart", "Admin")" class="btn btn-dark">
+                <i class="bi bi-cart"></i> User Cart
+            </a>
+
+            <a href="@Url.Action("UserAcc", "Admin")" class="btn btn-dark">
+                <i class="bi bi-people"></i> User Accounts
+            </a>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center py-4">
+            <p>No cart items yet.</p>
+        </div>
+    }
+    else
+    {
+        <div class="card border-0 shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>User</th>
+                            <th>Product</th>
+                            <th>Image</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Date Added</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.User.Username (@item.User.Email)</td>
+                                <td>@item.Product.Name</td>
+
+                                <td>
+                                    <img src="@Url.Action("GetImage", "Admin", new { id = item.Product.ProductId })"
+                                         class="rounded"
+                                         style="width: 60px; height: 60px; object-fit: cover;"
+                                         onerror="this.src='https://placehold.co/60x60/f0f0f0/999?text=No+Image'" />
+                                </td>
+
+                                <td>@item.Product.Category</td>
+                                <td>@item.Quantity</td>
+                                <td class="fw-bold text-danger">$@(item.Product.Price * item.Quantity)</td>
+                                <td>@item.DateAdded.ToString("MMM dd, yyyy HH:mm")</td>
+
+                                <td>
+                                    @if (item.Status == "Pending")
+                                    {
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    }
+                                    else if (item.Status == "For Delivery")
+                                    {
+                                        <span class="badge bg-primary">For Delivery</span>
+                                    }
+                                    else if (item.Status == "Cancelled")
+                                    {
+                                        <span class="badge bg-danger">Cancelled</span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (item.Status == "Pending")
+                                    {
+                                        <a href="@Url.Action("CancelCartItem", "Admin", new { id = item.CartItemId })"
+                                           class="btn btn-sm btn-danger"
+                                           onclick="return confirm('Are you sure you want to cancel this order?');">
+                                            Cancel
+                                        </a>
+
+                                        <a href="@Url.Action("MarkForDelivery", "Admin", new { id = item.CartItemId })"
+                                           class="btn btn-sm btn-primary ms-1">
+                                            For Delivery
+                                        </a>
+                                    }
+                                    else if (item.Status == "For Delivery")
+                                    {
+                                        <span class="text-muted">No actions</span>
+                                    }
+                                    else if (item.Status == "Cancelled")
+                                    {
+                                        <span class="text-muted">Cancelled</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

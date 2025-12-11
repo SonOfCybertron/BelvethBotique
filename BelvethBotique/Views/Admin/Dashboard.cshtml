@@ -1,0 +1,87 @@
+﻿@model IEnumerable<BelvethBotique.Models.Product>
+@{
+    ViewBag.Title = "Product Inventory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Product Inventory</h2>
+
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-dark">
+                <i class="bi bi-box"></i> Inventory
+            </a>
+
+            <a href="@Url.Action("UserCart", "Admin")" class="btn btn-dark">
+                <i class="bi bi-cart"></i> User Cart
+            </a>
+
+            <a href="@Url.Action("UserAcc", "Admin")" class="btn btn-dark">
+                <i class="bi bi-people"></i> User Accounts
+            </a>
+
+            <a href="@Url.Action("Create", "Admin")" class="btn btn-crimson">
+                <i class="bi bi-plus-circle me-1"></i> Add New Product
+            </a>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center py-4">
+            <i class="bi bi-inbox fs-1 mb-2"></i>
+            <p>No products yet. <a href="@Url.Action("Create", "Admin")">Add your first product</a>.</p>
+        </div>
+    }
+    else
+    {
+        <div class="card border-0 shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th style="width: 80px;">Image</th>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th style="width: 140px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <img src="@Url.Action("GetImage", "Admin", new { id = item.ProductId })"
+                                         class="rounded"
+                                         style="width: 60px; height: 60px; object-fit: cover;"
+                                         onerror="this.src='https://placehold.co/60x60/f0f0f0/999?text=No+Image'" />
+                                </td>
+                                <td>
+                                    @item.Name
+                                    @if (item.IsFeatured)
+                                    {
+                                        <span class="badge bg-danger ms-2">Featured</span>
+                                    }
+                                </td>
+                                <td>@item.Category</td>
+                                <td class="fw-bold text-danger">$@item.Price</td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <a href="@Url.Action("Edit", new { id = item.ProductId })"
+                                           class="btn btn-sm btn-outline-dark">Edit</a>
+                                        <a href="@Url.Action("Delete", new { id = item.ProductId })"
+                                           class="btn btn-sm btn-dark"
+                                           onclick="return confirm('Delete this product?');">Delete</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

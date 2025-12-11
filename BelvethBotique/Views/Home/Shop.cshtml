@@ -1,0 +1,41 @@
+﻿@model IEnumerable<BelvethBotique.Models.Product>
+@{
+    ViewBag.Title = "Shop";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Shop Collection</h2>
+ 
+        <div>
+            <a href="@Url.Action("Shop", new { category = "Dresses" })" class="btn btn-outline-secondary btn-sm me-2">Dresses</a>
+            <a href="@Url.Action("Shop", new { category = "Shoes" })" class="btn btn-outline-secondary btn-sm me-2">Shoes</a>
+            <a href="@Url.Action("Shop", new { category = "Accessories" })" class="btn btn-outline-secondary btn-sm">Accessories</a>
+        </div>
+      
+    </div>
+
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="product-card h-100">
+                    <img src="@Url.Action("GetImage", "Home", new { id = item.ProductId, t = DateTime.Now.Ticks })"
+                         class="product-img w-100"
+                         alt="@item.Name"
+                         onerror="this.src='https://placehold.co/300x400/f0f0f0/999?text=No+Image'">
+
+
+                    <div class="p-3">
+                        <h6 class="mb-1">@item.Name</h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="product-price">$@item.Price</span>
+                            <a href="@Url.Action("Details", "Home", new { id = item.ProductId })" class="text-muted small">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,62 @@
+﻿@model BelvethBotique.Models.Product
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5">
+    <div class="row g-5">
+
+        <div class="col-md-6">
+            <div class="position-relative overflow-hidden rounded" style="box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
+                <img src="@Url.Action("GetImage", "Home", new { id = Model.ProductId, t = DateTime.Now.Ticks })"
+                     class="product-img w-100"
+                     alt="@Model.Name"
+                     onerror="this.src='https://placehold.co/300x400/f0f0f0/999?text=No+Image'">
+            </div>
+        </div>
+
+        <div class="col-md-6 d-flex flex-column">
+
+            <a href="@Url.Action("Shop", "Home")" class="text-muted small mb-2" style="text-decoration: none;">
+                <i class="bi bi-chevron-left"></i> Back to Shop
+            </a>
+
+            <h1 class="fw-bold mb-2" style="font-size: 2.2rem; color: #222;">@Model.Name</h1>
+            <p class="text-muted mb-3">Category: <span class="text-dark fw-medium">@Model.Category</span></p>
+
+            <div class="mb-4">
+                <span class="fs-2 fw-bold" style="color: #DC143C;">$@Model.Price</span>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Description))
+            {
+                <p class="lead mb-4" style="color: #555;">@Model.Description</p>
+            }
+
+            <div class="mt-auto">
+
+                @if (Session["UserID"] != null)
+                {
+
+                    <a href="@Url.Action("AddToCart", "Cart", new { id = Model.ProductId })"
+                       class="btn w-100 py-3 mb-3 fw-bold"
+                       style="background-color: #DC143C; color: white; font-size: 1.1rem; letter-spacing: 1px;">
+                        <i class="bi bi-bag-plus me-2"></i> ADD TO CART
+                    </a>
+                }
+                else
+                {
+
+                    <a href="@Url.Action("Login", "Account")"
+                       class="btn w-100 py-3 mb-3 fw-bold"
+                       style="background-color: #6c757d; color: white; font-size: 1.1rem; letter-spacing: 1px;">
+                        <i class="bi bi-box-arrow-in-right me-2"></i> LOGIN TO ADD TO CART
+                    </a>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>

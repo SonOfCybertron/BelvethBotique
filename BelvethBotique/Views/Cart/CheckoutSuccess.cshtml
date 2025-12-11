@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewBag.Title = "Success";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5 text-center">
+    <h1 class="display-1 text-success">&#10004;</h1>
+    <h2>Order Placed!</h2>
+    <p>Your void garments are on their way.</p>
+    <a href="@Url.Action("Index", "Home")" class="btn btn-crimson mt-3">Return Home</a>
+</div>

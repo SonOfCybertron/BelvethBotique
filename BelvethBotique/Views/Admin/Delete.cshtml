@@ -1,0 +1,25 @@
+﻿@model BelvethBotique.Models.Product
+@{
+    ViewBag.Title = "Delete Product";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card bg-dark p-5 border-danger text-center" style="max-width: 600px; margin: auto;">
+        <h2 class="text-danger mb-3">Are you sure?</h2>
+        <p class="lead">You are about to delete <strong>@Model.Name</strong>.</p>
+        <p class="text-muted">This action cannot be undone.</p>
+
+        <img src="@Url.Action("GetImage", "Admin", new { id = Model.ProductId })"
+             class="img-thumbnail mx-auto d-block mb-4"
+             style="height: 150px; width: auto; background: #333;"
+             onerror="this.src='https://placehold.co/150x150/f0f0f0/999?text=No+Image'" />
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger btn-lg">Yes, Delete It</button>
+            <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-outline-light btn-lg ms-2">Cancel</a>
+        }
+    </div>
+</div>
